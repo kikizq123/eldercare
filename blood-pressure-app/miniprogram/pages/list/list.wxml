@@ -1,0 +1,11 @@
+<!--pages/list/list.wxml-->
+<view class="container">
+  <view class="page-header">
+    <text class="page-title">历史记录</text>
+  </view>
+  
+  <view class="empty-state">
+    <view class="empty-icon">📋</view>
+    <view class="empty-text">历史记录页面开发中...</view>
+  </view>
+</view>

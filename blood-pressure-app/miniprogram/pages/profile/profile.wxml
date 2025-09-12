@@ -1,0 +1,92 @@
+<!--pages/profile/profile.wxml-->
+<view class="container">
+  <!-- 用户信息卡片 -->
+  <view class="card user-info-card">
+    <view class="user-avatar">
+      <view class="avatar-placeholder" wx:if="{{!userInfo.avatar}}">
+        <text class="avatar-text">{{userInfo.nickname ? userInfo.nickname.charAt(0) : '用'}}</text>
+      </view>
+      <image class="avatar-img" wx:else src="{{userInfo.avatar}}" mode="aspectFill"></image>
+    </view>
+    <view class="user-details">
+      <text class="username">{{userInfo.nickname || '未登录用户'}}</text>
+      <text class="user-status">{{loginStatus}}</text>
+    </view>
+    <view class="login-btn" wx:if="{{!isLoggedIn}}">
+      <button class="btn btn-primary btn-small" bindtap="handleLogin">登录</button>
+    </view>
+  </view>
+
+  <!-- 数据统计 -->
+  <view class="card stats-overview-card" wx:if="{{isLoggedIn}}">
+    <view class="card-header">
+      <text class="card-title">我的数据</text>
+    </view>
+    <view class="card-content">
+      <view class="stats-grid">
+        <view class="stats-item">
+          <text class="stats-value">{{userStats.totalRecords || 0}}</text>
+          <text class="stats-label">总记录数</text>
+        </view>
+        <view class="stats-item">
+          <text class="stats-value">{{userStats.avgSystolic || '--'}}</text>
+          <text class="stats-label">平均收缩压</text>
+        </view>
+        <view class="stats-item">
+          <text class="stats-value">{{userStats.avgDiastolic || '--'}}</text>
+          <text class="stats-label">平均舒张压</text>
+        </view>
+        <view class="stats-item">
+          <text class="stats-value">{{daysSinceFirst || 0}}</text>
+          <text class="stats-label">使用天数</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 功能菜单 -->
+  <view class="card menu-card">
+    <view class="card-header">
+      <text class="card-title">功能设置</text>
+    </view>
+    <view class="card-content">
+      <view class="menu-list">
+        <view class="menu-item" bindtap="goToSettings">
+          <view class="menu-icon">⚙️</view>
+          <text class="menu-text">个人设置</text>
+          <view class="menu-arrow">></view>
+        </view>
+        
+        <view class="menu-item" bindtap="goToHelp">
+          <view class="menu-icon">❓</view>
+          <text class="menu-text">使用帮助</text>
+          <view class="menu-arrow">></view>
+        </view>
+        
+        <view class="menu-item" bindtap="goToAbout">
+          <view class="menu-icon">ℹ️</view>
+          <text class="menu-text">关于我们</text>
+          <view class="menu-arrow">></view>
+        </view>
+        
+        <view class="menu-item" bindtap="clearTestData">
+          <view class="menu-icon">🗑️</view>
+          <text class="menu-text clear-data-text">清除测试数据</text>
+          <view class="menu-arrow">></view>
+        </view>
+        
+        <view class="menu-item" wx:if="{{isLoggedIn}}" bindtap="handleLogout">
+          <view class="menu-icon">🚪</view>
+          <text class="menu-text logout-text">退出登录</text>
+          <view class="menu-arrow">></view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 版本信息 -->
+  <view class="version-info">
+    <text class="version-text">血压记录 v{{appVersion}}</text>
+    <text class="copyright-text">健康管理，从记录开始</text>
+  </view>
+</view>

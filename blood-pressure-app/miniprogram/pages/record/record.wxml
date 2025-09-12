@@ -1,0 +1,187 @@
+<!--pages/record/record.wxml-->
+<view class="container">
+  <!-- 页面标题 -->
+  <view class="page-header">
+    <text class="page-title">记录血压</text>
+    <text class="page-subtitle">准确记录有助于健康管理</text>
+  </view>
+
+  <!-- 记录表单 -->
+  <view class="card record-form-card">
+    <form bindsubmit="onSubmit">
+      <!-- 血压数值输入 -->
+      <view class="form-section">
+        <view class="section-title">血压数值</view>
+        
+        <view class="bp-input-container">
+          <view class="bp-input-group">
+            <view class="bp-input-item">
+              <text class="bp-label">收缩压（高压）</text>
+              <input 
+                class="bp-input {{systolicError ? 'error' : ''}}" 
+                type="number" 
+                placeholder="120"
+                value="{{formData.systolic}}" 
+                bindinput="onSystolicInput"
+                bindblur="validateSystolic"
+                focus="{{systolicFocus}}"
+              />
+              <text class="bp-unit">mmHg</text>
+              <view class="error-tip" wx:if="{{systolicError}}">{{systolicError}}</view>
+            </view>
+            
+            <view class="bp-separator">/</view>
+            
+            <view class="bp-input-item">
+              <text class="bp-label">舒张压（低压）</text>
+              <input 
+                class="bp-input {{diastolicError ? 'error' : ''}}" 
+                type="number" 
+                placeholder="80"
+                value="{{formData.diastolic}}" 
+                bindinput="onDiastolicInput"
+                bindblur="validateDiastolic"
+              />
+              <text class="bp-unit">mmHg</text>
+              <view class="error-tip" wx:if="{{diastolicError}}">{{diastolicError}}</view>
+            </view>
+          </view>
+          
+          <!-- 血压分级显示 -->
+          <view class="bp-level-display" wx:if="{{bpLevel}}">
+            <view class="level-indicator" style="background-color: {{bpLevel.color}}"></view>
+            <view class="level-info">
+              <text class="level-name">{{bpLevel.name}}</text>
+              <text class="level-desc">{{bpLevel.description}}</text>
+            </view>
+          </view>
+        </view>
+      </view>
+
+      <!-- 测量时间 -->
+      <view class="form-section">
+        <view class="section-title">测量时间</view>
+        <view class="time-picker-container">
+          <picker 
+            mode="date" 
+            value="{{formData.date}}" 
+            start="2020-01-01" 
+            end="{{todayDate}}"
+            bindchange="onDateChange"
+          >
+            <view class="picker-item">
+              <text class="picker-label">日期</text>
+              <view class="picker-value">
+                <text>{{formData.dateDisplay}}</text>
+                <text class="picker-arrow">></text>
+              </view>
+            </view>
+          </picker>
+          
+          <picker 
+            mode="time" 
+            value="{{formData.time}}" 
+            bindchange="onTimeChange"
+          >
+            <view class="picker-item">
+              <text class="picker-label">时间</text>
+              <view class="picker-value">
+                <text>{{formData.timeDisplay}}</text>
+                <text class="picker-arrow">></text>
+              </view>
+            </view>
+          </picker>
+        </view>
+      </view>
+
+      <!-- 测量环境 -->
+      <view class="form-section">
+        <view class="section-title">测量环境（可选）</view>
+        
+        <view class="context-section">
+          <text class="context-label">测量前状态</text>
+          <view class="radio-group">
+            <radio-group bindchange="onActivityChange">
+              <label class="radio-item" wx:for="{{activityOptions}}" wx:key="value">
+                <radio value="{{item.value}}" checked="{{item.value === formData.activity}}" />
+                <text class="radio-text">{{item.label}}</text>
+              </label>
+            </radio-group>
+          </view>
+        </view>
+
+        <view class="context-section">
+          <text class="context-label">情绪状态</text>
+          <view class="radio-group">
+            <radio-group bindchange="onEmotionChange">
+              <label class="radio-item" wx:for="{{emotionOptions}}" wx:key="value">
+                <radio value="{{item.value}}" checked="{{item.value === formData.emotion}}" />
+                <text class="radio-text">{{item.label}}</text>
+              </label>
+            </radio-group>
+          </view>
+        </view>
+      </view>
+
+      <!-- 备注信息 -->
+      <view class="form-section">
+        <view class="section-title">备注信息（可选）</view>
+        <textarea 
+          class="notes-textarea" 
+          placeholder="记录测量时的特殊情况、身体感受等..."
+          value="{{formData.notes}}" 
+          bindinput="onNotesInput"
+          maxlength="200"
+          show-confirm-bar="{{false}}"
+        />
+        <view class="notes-counter">{{notesLength}}/200</view>
+      </view>
+
+      <!-- 操作按钮 -->
+      <view class="form-actions">
+        <button 
+          class="btn btn-primary btn-large" 
+          form-type="submit"
+          disabled="{{!canSubmit || submitting}}"
+        >
+          {{submitting ? '保存中...' : '保存记录'}}
+        </button>
+        
+        <button 
+          class="btn btn-secondary btn-large" 
+          bindtap="clearForm"
+          disabled="{{submitting}}"
+        >
+          清空重填
+        </button>
+      </view>
+    </form>
+  </view>
+
+  <!-- 测量建议 -->
+  <view class="card tips-card">
+    <view class="card-header">
+      <text class="card-title">💡 测量小贴士</text>
+    </view>
+    <view class="card-content">
+      <view class="tips-list">
+        <view class="tip-item">
+          <text class="tip-dot">•</text>
+          <text class="tip-text">测量前静坐休息5分钟</text>
+        </view>
+        <view class="tip-item">
+          <text class="tip-dot">•</text>
+          <text class="tip-text">避免在运动后立即测量</text>
+        </view>
+        <view class="tip-item">
+          <text class="tip-dot">•</text>
+          <text class="tip-text">保持心情平静，正确坐姿</text>
+        </view>
+        <view class="tip-item">
+          <text class="tip-dot">•</text>
+          <text class="tip-text">同一时间段测量更准确</text>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>

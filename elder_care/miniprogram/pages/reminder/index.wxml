@@ -1,0 +1,69 @@
+<view class="container">
+  <button class="share-btn" open-type="share">分享</button>
+  <view class="section-title">用药提醒</view>
+
+  <!-- 用药计划列表 -->
+  <view class="medication-list" wx:if="{{medications.length > 0}}">
+    <view class="medication-item" wx:for="{{medications}}" wx:key="_id">
+      <view class="medication-info">
+        <text class="medication-name">{{item.name}}</text>
+        <text class="medication-dosage">{{item.dosage}}</text>
+        <text class="medication-time">{{item.time}}</text>
+      </view>
+      <view class="medication-actions">
+        <button class="taken-btn {{item.takenToday ? 'checked' : ''}}" bindtap="markTaken" data-id="{{item._id}}">
+          {{item.takenToday ? '已服用' : '服用'}}
+        </button>
+        <button class="delete-btn" bindtap="deleteMedication" data-id="{{item._id}}">删除</button>
+      </view>
+    </view>
+  </view>
+  <view class="empty-tip" wx:else>暂无用药计划，点击下方按钮添加</view>
+
+  <!-- 添加用药计划按钮 -->
+  <button class="add-btn" bindtap="showAddForm">添加用药计划</button>
+
+  <!-- 添加用药计划表单 -->
+  <view class="form-mask" wx:if="{{showAddForm}}" bindtap="hideAddForm">
+    <view class="add-form" catchtap="stopPropagation">
+      <view class="form-title">添加用药计划</view>
+      <view class="form-group">
+        <text>药品名称</text>
+        <input class="form-input" placeholder="请输入药品名称" value="{{addForm.name}}" bindinput="onAddInput" data-field="name" />
+      </view>
+      <view class="form-group">
+        <text>剂量</text>
+        <input class="form-input" placeholder="如1片/5ml" value="{{addForm.dosage}}" bindinput="onAddInput" data-field="dosage" />
+      </view>
+      <view class="form-group">
+        <text>时间</text>
+        <text style="color:red;font-size:24rpx;">{{addForm.timeList}}</text>
+        <view class="time-options">
+          <view 
+            class="time-btn{{Array.isArray(addForm.timeList) && addForm.timeList.indexOf('上午') !== -1 ? ' selected' : ''}}"
+            data-value="上午" catchtap="onTimeTypeBtnTap">上午</view>
+          <view 
+            class="time-btn{{Array.isArray(addForm.timeList) && addForm.timeList.indexOf('中午') !== -1 ? ' selected' : ''}}"
+            data-value="中午" catchtap="onTimeTypeBtnTap">中午</view>
+          <view 
+            class="time-btn{{Array.isArray(addForm.timeList) && addForm.timeList.indexOf('晚上') !== -1 ? ' selected' : ''}}"
+            data-value="晚上" catchtap="onTimeTypeBtnTap">晚上</view>
+          <view 
+            class="time-btn{{Array.isArray(addForm.timeList) && addForm.timeList.indexOf('自定义') !== -1 ? ' selected' : ''}}"
+            data-value="自定义" catchtap="onTimeTypeBtnTap">自定义</view>
+        </view>
+        <view wx:if="{{addForm.timeList.indexOf('自定义') !== -1}}" class="custom-time-list">
+          <view wx:for="{{addForm.customTimeList}}" wx:key="index" class="custom-time-item">
+            <text>{{item}}</text>
+            <text class="del-custom-time" data-index="{{index}}" bindtap="removeCustomTime">×</text>
+          </view>
+          <input class="form-input" placeholder="如 08:00，回车添加" value="{{addForm.customTimeInput}}" bindinput="onAddInput" data-field="customTimeInput" bindconfirm="addCustomTime" />
+        </view>
+      </view>
+      <view class="form-actions">
+        <button class="cancel-btn" bindtap="hideAddForm">取消</button>
+        <button class="submit-btn" bindtap="submitAddMedication">确定</button>
+      </view>
+    </view>
+  </view>
+</view>

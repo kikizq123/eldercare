@@ -1,0 +1,51 @@
+<view class="container">
+  <view class="section-title">康复项目</view>
+  
+  <!-- 康复项目列表 -->
+  <view class="rehab-list" wx:if="{{rehabItems.length > 0}}">
+    <view class="rehab-item" wx:for="{{rehabItems}}" wx:key="_id">
+      <view class="rehab-info">
+        <text class="rehab-name">{{item.name}}</text>
+        <text class="rehab-frequency">{{item.frequency}}</text>
+      </view>
+      <view class="rehab-actions">
+        <button class="checkin-btn {{item.checkedToday ? 'checked' : ''}}" 
+                bindtap="toggleCheckin" 
+                data-id="{{item._id}}">
+          {{item.checkedToday ? '已打卡' : '打卡'}}
+        </button>
+      </view>
+    </view>
+  </view>
+
+  <!-- 无数据提示 -->
+  <view class="empty-tip" wx:else>
+    暂无康复项目，点击下方按钮添加
+  </view>
+
+  <!-- 添加康复项目按钮 -->
+  <button class="add-btn" bindtap="showAddForm">添加康复项目</button>
+
+  <!-- 添加康复项目表单 -->
+  <view class="form-mask" wx:if="{{showAddForm}}" bindtap="hideAddForm">
+    <view class="add-form" catchtap="stopPropagation">
+      <view class="form-title">添加康复项目</view>
+      <view class="form-group">
+        <text>项目名称</text>
+        <input class="form-input" placeholder="如抬腿、手指操等" value="{{addForm.name}}" bindinput="onAddInput" data-field="name" />
+      </view>
+      <view class="form-group">
+        <text>频率</text>
+        <input class="form-input" placeholder="如每日3次，每次10分钟" value="{{addForm.frequency}}" bindinput="onAddInput" data-field="frequency" />
+      </view>
+      <view class="form-group">
+        <text>备注（可选）</text>
+        <textarea class="form-textarea" placeholder="项目说明或要点" value="{{addForm.notes}}" bindinput="onAddInput" data-field="notes"></textarea>
+      </view>
+      <view class="form-actions">
+        <button class="cancel-btn" bindtap="hideAddForm">取消</button>
+        <button class="submit-btn" bindtap="submitAddRehab">确定</button>
+      </view>
+    </view>
+  </view>
+</view>

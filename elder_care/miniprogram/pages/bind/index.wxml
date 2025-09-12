@@ -1,0 +1,87 @@
+<!--家人关系绑定页面-->
+<view class="container">
+  <!-- 长辈端界面 -->
+  <view wx:if="{{role === 'elder'}}" class="elder-section">
+    <view class="section-title">邀请家人关注</view>
+    
+    <view class="invite-card">
+      <view class="invite-title">您的邀请码</view>
+      <view class="invite-code">{{inviteCode}}</view>
+      <view class="invite-actions">
+        <button class="btn-copy" bind:tap="copyInviteCode">复制邀请码</button>
+        <button class="btn-qr" bind:tap="showQRCode">显示二维码</button>
+      </view>
+    </view>
+    
+    <view class="tips">
+      <text>请将邀请码分享给家人，或让家人扫描二维码进行绑定</text>
+    </view>
+  </view>
+  
+  <!-- 家人端界面 -->
+  <view wx:elif="{{role === 'family'}}" class="family-section">
+    <view class="section-title">关注长辈</view>
+    
+    <view class="bind-actions">
+      <button class="btn-scan" bind:tap="scanQRCode">扫描二维码</button>
+      <button class="btn-input" bind:tap="showInputCode">输入邀请码</button>
+    </view>
+  </view>
+  
+  <!-- 家人列表 -->
+  <view class="family-list" wx:if="{{familyMembers.length > 0}}">
+    <view class="section-title">
+      <text wx:if="{{role === 'elder'}}">已关注的家人</text>
+      <text wx:else>已关注的长辈</text>
+    </view>
+    
+    <view class="member-item" wx:for="{{familyMembers}}" wx:key="_id">
+      <view class="member-info">
+        <view class="member-name">{{item.name}}</view>
+        <view class="member-role">{{item.role === 'elder' ? '长辈' : '家人'}}</view>
+      </view>
+      <button class="btn-unbind" bind:tap="unbindFamily" data-family-id="{{item._id}}">解除绑定</button>
+    </view>
+  </view>
+  
+  <!-- 空状态 -->
+  <view class="empty-state" wx:if="{{familyMembers.length === 0}}">
+    <image class="empty-icon" src="/images/empty-family.png"></image>
+    <view class="empty-text">
+      <text wx:if="{{role === 'elder'}}">还没有家人关注您</text>
+      <text wx:else>还没有关注的长辈</text>
+    </view>
+  </view>
+</view>
+
+<!-- 二维码弹窗 -->
+<view class="modal" wx:if="{{showQRCode}}" bind:tap="hideQRCode">
+  <view class="modal-content" catch:tap="">
+    <view class="modal-title">邀请二维码</view>
+    <view class="qr-container">
+      <image class="qr-code" src="{{qrCodeUrl}}"></image>
+    </view>
+    <view class="qr-code-text">{{inviteCode}}</view>
+    <button class="btn-close" bind:tap="hideQRCode">关闭</button>
+  </view>
+</view>
+
+<!-- 输入邀请码弹窗 -->
+<view class="modal" wx:if="{{showInputCode}}" bind:tap="hideInputCode">
+  <view class="modal-content" catch:tap="">
+    <view class="modal-title">输入邀请码</view>
+    <view class="input-container">
+      <input 
+        class="code-input" 
+        placeholder="请输入邀请码" 
+        value="{{inputCode}}"
+        bind:input="onCodeInput"
+        maxlength="6"
+      />
+    </view>
+    <view class="modal-actions">
+      <button class="btn-cancel" bind:tap="hideInputCode">取消</button>
+      <button class="btn-confirm" bind:tap="submitBinding">确认</button>
+    </view>
+  </view>
+</view>

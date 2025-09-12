@@ -1,0 +1,161 @@
+/* pages/profile/profile.wxss */
+
+.user-info-card {
+  margin-bottom: 30rpx;
+}
+
+.user-info-card .card-content {
+  display: flex;
+  align-items: center;
+  padding: 40rpx 30rpx;
+}
+
+.user-avatar {
+  margin-right: 30rpx;
+}
+
+.avatar-img {
+  width: 120rpx;
+  height: 120rpx;
+  border-radius: 50%;
+  background: #f0f0f0;
+}
+
+.avatar-placeholder {
+  width: 120rpx;
+  height: 120rpx;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #4A90E2 0%, #357ABD 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.avatar-text {
+  font-size: 48rpx;
+  font-weight: bold;
+  color: #ffffff;
+}
+
+.user-details {
+  flex: 1;
+}
+
+.username {
+  display: block;
+  font-size: 36rpx;
+  font-weight: bold;
+  color: #333333;
+  margin-bottom: 8rpx;
+}
+
+.user-status {
+  font-size: 26rpx;
+  color: #666666;
+}
+
+.login-btn {
+  margin-left: 20rpx;
+}
+
+/* 数据统计 */
+.stats-overview-card {
+  margin-bottom: 30rpx;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20rpx;
+}
+
+.stats-item {
+  text-align: center;
+  padding: 30rpx 20rpx;
+  background: #f8f9fa;
+  border-radius: 12rpx;
+}
+
+.stats-value {
+  display: block;
+  font-size: 48rpx;
+  font-weight: bold;
+  color: #4A90E2;
+  margin-bottom: 8rpx;
+}
+
+.stats-label {
+  font-size: 24rpx;
+  color: #666666;
+}
+
+/* 功能菜单 */
+.menu-card {
+  margin-bottom: 30rpx;
+}
+
+.menu-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.menu-item {
+  display: flex;
+  align-items: center;
+  padding: 30rpx 0;
+  border-bottom: 1rpx solid #f0f0f0;
+  transition: background 0.2s ease;
+}
+
+.menu-item:last-child {
+  border-bottom: none;
+}
+
+.menu-item:active {
+  background: #f8f9fa;
+}
+
+.menu-icon {
+  width: 50rpx;
+  text-align: center;
+  font-size: 32rpx;
+  margin-right: 20rpx;
+}
+
+.menu-text {
+  flex: 1;
+  font-size: 32rpx;
+  color: #333333;
+}
+
+.logout-text {
+  color: #ff4757;
+}
+
+.clear-data-text {
+  color: #fa8c16;
+}
+
+.menu-arrow {
+  font-size: 28rpx;
+  color: #cccccc;
+}
+
+/* 版本信息 */
+.version-info {
+  text-align: center;
+  padding: 40rpx 30rpx;
+  margin-bottom: 60rpx;
+}
+
+.version-text {
+  display: block;
+  font-size: 24rpx;
+  color: #999999;
+  margin-bottom: 8rpx;
+}
+
+.copyright-text {
+  font-size: 22rpx;
+  color: #cccccc;
+}

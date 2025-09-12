@@ -1,0 +1,295 @@
+/* pages/index/index.wxss */
+
+.welcome-card {
+  background: linear-gradient(135deg, #4A90E2 0%, #357ABD 100%);
+  color: #ffffff;
+  margin-bottom: 30rpx;
+}
+
+.welcome-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 40rpx 30rpx;
+}
+
+.welcome-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.greeting {
+  font-size: 28rpx;
+  opacity: 0.9;
+  margin-bottom: 8rpx;
+}
+
+.username {
+  font-size: 36rpx;
+  font-weight: bold;
+}
+
+.welcome-date {
+  font-size: 26rpx;
+  opacity: 0.8;
+}
+
+/* 快速记录卡片 */
+.quick-record-card {
+  margin-bottom: 30rpx;
+}
+
+.last-record {
+  display: flex;
+  align-items: center;
+}
+
+.last-record-text {
+  font-size: 24rpx;
+  color: #999999;
+}
+
+.quick-record-form {
+  padding: 20rpx 0;
+}
+
+.bp-input-group {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 40rpx;
+  padding: 30rpx;
+  background: #f8f9fa;
+  border-radius: 16rpx;
+}
+
+.bp-input-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+}
+
+.bp-label {
+  font-size: 24rpx;
+  color: #666666;
+  margin-bottom: 16rpx;
+}
+
+.bp-input {
+  width: 120rpx;
+  height: 80rpx;
+  text-align: center;
+  font-size: 48rpx;
+  font-weight: bold;
+  color: #4A90E2;
+  border: none;
+  background: #ffffff;
+  border-radius: 12rpx;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.1);
+}
+
+.bp-separator {
+  font-size: 36rpx;
+  color: #666666;
+  margin: 0 30rpx;
+  margin-top: 40rpx;
+}
+
+.bp-unit {
+  font-size: 20rpx;
+  color: #999999;
+  margin-top: 8rpx;
+}
+
+.quick-save-btn {
+  width: 100%;
+  margin-top: 20rpx;
+}
+
+/* 血压分级提示 */
+.level-tip-card {
+  margin-bottom: 30rpx;
+  border-left: 8rpx solid #4A90E2;
+}
+
+.level-tip {
+  display: flex;
+  align-items: center;
+  padding: 20rpx 30rpx;
+}
+
+.level-indicator {
+  width: 16rpx;
+  height: 16rpx;
+  border-radius: 50%;
+  margin-right: 20rpx;
+}
+
+.level-content {
+  flex: 1;
+}
+
+.level-name {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #333333;
+  margin-right: 20rpx;
+}
+
+.level-desc {
+  font-size: 26rpx;
+  color: #666666;
+}
+
+/* 统计卡片 */
+.stats-card {
+  margin-bottom: 30rpx;
+}
+
+.more-link {
+  font-size: 26rpx;
+  color: #4A90E2;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20rpx;
+}
+
+.stats-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20rpx;
+  background: #f8f9fa;
+  border-radius: 12rpx;
+}
+
+.stats-value {
+  font-size: 40rpx;
+  font-weight: bold;
+  color: #4A90E2;
+  margin-bottom: 8rpx;
+}
+
+.stats-label {
+  font-size: 24rpx;
+  color: #666666;
+}
+
+/* 最近记录 */
+.recent-records-card {
+  margin-bottom: 30rpx;
+}
+
+.recent-records {
+  display: flex;
+  flex-direction: column;
+  gap: 20rpx;
+}
+
+.record-item {
+  display: flex;
+  align-items: center;
+  padding: 20rpx;
+  background: #f8f9fa;
+  border-radius: 12rpx;
+  transition: background 0.2s ease;
+}
+
+.record-item:active {
+  background: #e6e6e6;
+}
+
+.record-time {
+  font-size: 26rpx;
+  color: #666666;
+  width: 140rpx;
+}
+
+.record-bp {
+  flex: 1;
+  margin: 0 20rpx;
+}
+
+.record-bp .bp-value {
+  justify-content: flex-start;
+  margin: 0;
+}
+
+.record-bp .bp-systolic,
+.record-bp .bp-diastolic {
+  font-size: 32rpx;
+}
+
+.record-bp .bp-separator {
+  font-size: 24rpx;
+  margin: 0 8rpx;
+  margin-top: 0;
+}
+
+.record-bp .bp-unit {
+  font-size: 20rpx;
+  margin-top: 0;
+  margin-left: 8rpx;
+}
+
+.record-level {
+  display: flex;
+  align-items: center;
+}
+
+/* 空状态 */
+.empty-state {
+  text-align: center;
+  padding: 100rpx 30rpx;
+}
+
+.empty-icon {
+  font-size: 120rpx;
+  margin-bottom: 30rpx;
+}
+
+.empty-text {
+  font-size: 32rpx;
+  color: #999999;
+  margin-bottom: 16rpx;
+}
+
+.empty-desc {
+  font-size: 26rpx;
+  color: #cccccc;
+  margin-bottom: 40rpx;
+  line-height: 1.5;
+}
+
+/* 加载状态 */
+.loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 100rpx 30rpx;
+}
+
+.loading-spinner {
+  width: 60rpx;
+  height: 60rpx;
+  border: 4rpx solid #f0f0f0;
+  border-top: 4rpx solid #4A90E2;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.loading-text {
+  font-size: 28rpx;
+  color: #999999;
+  margin-top: 20rpx;
+}

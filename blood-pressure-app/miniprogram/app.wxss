@@ -1,0 +1,427 @@
+/* 全局样式 */
+page {
+  background-color: #f8f9fa;
+  font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Helvetica, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', SimSun, sans-serif;
+  font-size: 32rpx;
+  color: #333333;
+  line-height: 1.4;
+}
+
+/* 容器样式 */
+.container {
+  padding: 0 30rpx;
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+
+.safe-area {
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+/* 卡片样式 */
+.card {
+  background: #ffffff;
+  border-radius: 16rpx;
+  box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.08);
+  margin-bottom: 20rpx;
+  overflow: hidden;
+}
+
+.card-header {
+  padding: 30rpx;
+  border-bottom: 1rpx solid #f0f0f0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.card-title {
+  font-size: 36rpx;
+  font-weight: 600;
+  color: #333333;
+}
+
+.card-content {
+  padding: 30rpx;
+}
+
+/* 按钮样式 */
+.btn {
+  border-radius: 12rpx;
+  font-size: 32rpx;
+  padding: 20rpx 40rpx;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #4A90E2 0%, #357ABD 100%);
+  color: #ffffff;
+}
+
+.btn-primary:active {
+  background: linear-gradient(135deg, #357ABD 0%, #2E6DA4 100%);
+}
+
+.btn-secondary {
+  background: #ffffff;
+  color: #4A90E2;
+  border: 1rpx solid #4A90E2;
+}
+
+.btn-secondary:active {
+  background: #f8f9fa;
+}
+
+.btn-danger {
+  background: #ff4757;
+  color: #ffffff;
+}
+
+.btn-danger:active {
+  background: #ff3742;
+}
+
+.btn-large {
+  padding: 28rpx 60rpx;
+  font-size: 36rpx;
+  border-radius: 16rpx;
+}
+
+.btn-small {
+  padding: 16rpx 32rpx;
+  font-size: 28rpx;
+  border-radius: 8rpx;
+}
+
+.btn-disabled {
+  background: #f0f0f0 !important;
+  color: #cccccc !important;
+  border-color: #f0f0f0 !important;
+}
+
+/* 表单样式 */
+.form-group {
+  margin-bottom: 30rpx;
+}
+
+.form-label {
+  display: block;
+  margin-bottom: 16rpx;
+  font-size: 28rpx;
+  color: #666666;
+  font-weight: 500;
+}
+
+.form-input {
+  width: 100%;
+  padding: 24rpx 20rpx;
+  border: 1rpx solid #e6e6e6;
+  border-radius: 12rpx;
+  font-size: 32rpx;
+  background: #ffffff;
+  box-sizing: border-box;
+}
+
+.form-input:focus {
+  border-color: #4A90E2;
+}
+
+.form-input.error {
+  border-color: #ff4757;
+}
+
+.form-error {
+  margin-top: 8rpx;
+  font-size: 24rpx;
+  color: #ff4757;
+}
+
+/* 列表样式 */
+.list {
+  background: #ffffff;
+}
+
+.list-item {
+  padding: 30rpx;
+  border-bottom: 1rpx solid #f0f0f0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.list-item:last-child {
+  border-bottom: none;
+}
+
+.list-item:active {
+  background: #f8f9fa;
+}
+
+.list-item-content {
+  flex: 1;
+}
+
+.list-item-title {
+  font-size: 32rpx;
+  color: #333333;
+  margin-bottom: 8rpx;
+}
+
+.list-item-desc {
+  font-size: 26rpx;
+  color: #999999;
+}
+
+.list-item-arrow {
+  width: 16rpx;
+  height: 16rpx;
+  border-right: 2rpx solid #cccccc;
+  border-top: 2rpx solid #cccccc;
+  transform: rotate(45deg);
+  margin-left: 20rpx;
+}
+
+/* 血压数值样式 */
+.bp-value {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  margin: 20rpx 0;
+}
+
+.bp-systolic {
+  font-size: 72rpx;
+  font-weight: bold;
+  color: #4A90E2;
+}
+
+.bp-separator {
+  font-size: 48rpx;
+  color: #666666;
+  margin: 0 16rpx;
+}
+
+.bp-diastolic {
+  font-size: 72rpx;
+  font-weight: bold;
+  color: #4A90E2;
+}
+
+.bp-unit {
+  font-size: 24rpx;
+  color: #999999;
+  margin-left: 8rpx;
+}
+
+/* 血压分级标签 */
+.bp-level {
+  display: inline-block;
+  padding: 8rpx 16rpx;
+  border-radius: 20rpx;
+  font-size: 24rpx;
+  color: #ffffff;
+  font-weight: 500;
+}
+
+.bp-level-optimal {
+  background: #52c41a;
+}
+
+.bp-level-normal {
+  background: #1890ff;
+}
+
+.bp-level-high-normal {
+  background: #faad14;
+}
+
+.bp-level-mild {
+  background: #fa8c16;
+}
+
+.bp-level-moderate {
+  background: #f5222d;
+}
+
+.bp-level-severe {
+  background: #a8071a;
+}
+
+/* 统计数据样式 */
+.stats-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20rpx;
+  margin: 20rpx 0;
+}
+
+.stats-item {
+  text-align: center;
+  padding: 30rpx 20rpx;
+  background: #ffffff;
+  border-radius: 12rpx;
+}
+
+.stats-value {
+  font-size: 48rpx;
+  font-weight: bold;
+  color: #4A90E2;
+  margin-bottom: 8rpx;
+}
+
+.stats-label {
+  font-size: 26rpx;
+  color: #666666;
+}
+
+/* 图表容器 */
+.chart-container {
+  padding: 30rpx;
+  background: #ffffff;
+  border-radius: 16rpx;
+  margin: 20rpx 0;
+}
+
+.chart-title {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #333333;
+  margin-bottom: 30rpx;
+  text-align: center;
+}
+
+/* 空状态 */
+.empty-state {
+  text-align: center;
+  padding: 100rpx 30rpx;
+}
+
+.empty-icon {
+  font-size: 120rpx;
+  color: #e6e6e6;
+  margin-bottom: 30rpx;
+}
+
+.empty-text {
+  font-size: 32rpx;
+  color: #999999;
+  margin-bottom: 40rpx;
+}
+
+/* 加载状态 */
+.loading {
+  text-align: center;
+  padding: 40rpx;
+}
+
+.loading-text {
+  font-size: 28rpx;
+  color: #999999;
+  margin-top: 20rpx;
+}
+
+/* 工具类 */
+.text-center {
+  text-align: center;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.text-primary {
+  color: #4A90E2;
+}
+
+.text-success {
+  color: #52c41a;
+}
+
+.text-warning {
+  color: #faad14;
+}
+
+.text-danger {
+  color: #ff4757;
+}
+
+.text-muted {
+  color: #999999;
+}
+
+.font-large {
+  font-size: 36rpx;
+}
+
+.font-small {
+  font-size: 26rpx;
+}
+
+.font-bold {
+  font-weight: bold;
+}
+
+.mt-10 { margin-top: 10rpx; }
+.mt-20 { margin-top: 20rpx; }
+.mt-30 { margin-top: 30rpx; }
+.mb-10 { margin-bottom: 10rpx; }
+.mb-20 { margin-bottom: 20rpx; }
+.mb-30 { margin-bottom: 30rpx; }
+.ml-10 { margin-left: 10rpx; }
+.ml-20 { margin-left: 20rpx; }
+.mr-10 { margin-right: 10rpx; }
+.mr-20 { margin-right: 20rpx; }
+
+.flex {
+  display: flex;
+}
+
+.flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.flex-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.flex-column {
+  display: flex;
+  flex-direction: column;
+}
+
+.flex-1 {
+  flex: 1;
+}
+
+/* 浮动操作按钮 */
+.fab {
+  position: fixed;
+  right: 30rpx;
+  bottom: 120rpx;
+  width: 120rpx;
+  height: 120rpx;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #4A90E2 0%, #357ABD 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8rpx 24rpx rgba(74, 144, 226, 0.3);
+  z-index: 999;
+}
+
+.fab:active {
+  transform: scale(0.95);
+}
+
+.fab-icon {
+  font-size: 48rpx;
+  color: #ffffff;
+}

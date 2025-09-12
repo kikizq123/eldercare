@@ -1,0 +1,117 @@
+<view class="container">
+  <view class="section">
+    <view class="section-title">个人信息</view>
+    <view class="form-group">
+      <text>姓名</text>
+      <input class="form-input" 
+             placeholder="请输入姓名" 
+             value="{{userInfo.name}}"
+             data-field="name"
+             bindinput="handleUserInfoInput"/>
+    </view>
+    <view class="form-group">
+      <text>手机号</text>
+      <input class="form-input" 
+             placeholder="请输入手机号" 
+             value="{{userInfo.phone}}"
+             data-field="phone"
+             bindinput="handleUserInfoInput"/>
+    </view>
+  </view>
+
+  <view class="section">
+    <view class="section-title">紧急联系人</view>
+    <view class="form-group">
+      <text>姓名</text>
+      <input class="form-input" 
+             placeholder="请输入紧急联系人姓名" 
+             value="{{emergencyContact.name}}"
+             data-field="name"
+             bindinput="handleEmergencyContactInput"/>
+    </view>
+    <view class="form-group">
+      <text>手机号</text>
+      <input class="form-input" 
+             placeholder="请输入紧急联系人手机号" 
+             value="{{emergencyContact.phone}}"
+             data-field="phone"
+             bindinput="handleEmergencyContactInput"/>
+    </view>
+    <view class="form-group">
+      <text>关系</text>
+      <input class="form-input" 
+             placeholder="请输入与紧急联系人的关系" 
+             value="{{emergencyContact.relationship}}"
+             data-field="relationship"
+             bindinput="handleEmergencyContactInput"/>
+    </view>
+  </view>
+
+  <button class="save-btn" bindtap="saveInfo">保存</button>
+
+  <view class="section-title">今日用药提醒</view>
+  <view class="medication-list">
+    <block wx:for="{{medications}}" wx:key="_id">
+      <view class="medication-item">
+        <view class="medication-info">
+          <text class="medication-name">{{item.name}}</text>
+          <text class="medication-dosage">{{item.dosage}}</text>
+          <text class="medication-frequency">{{item.frequency}}</text>
+        </view>
+        <view class="medication-schedule">
+          <block wx:for="{{item.schedule}}" wx:key="time">
+            <view class="schedule-item">
+              <text>{{item2.time}}</text>
+              <button 
+                class="taken-btn" 
+                wx:if="{{!item2.taken}}" 
+                bindtap="markTaken" 
+                data-id="{{item._id}}" 
+                data-idx="{{index2}}"
+              >已服用</button>
+              <text wx:if="{{item2.taken}}" class="taken-label">已服用</text>
+            </view>
+          </block>
+        </view>
+      </view>
+    </block>
+  </view>
+
+  <button class="add-btn" bindtap="showAddMedication">添加用药</button>
+
+  <!-- 添加用药表单 -->
+  <view class="add-form" wx:if="{{showAddForm}}">
+    <view class="form-group">
+      <text>药品名称</text>
+      <input class="form-input" placeholder="请输入药品名称" value="{{addForm.name}}" bindinput="onAddInput" data-field="name" />
+    </view>
+    <view class="form-group">
+      <text>剂量</text>
+      <input class="form-input" placeholder="如1片/5ml" value="{{addForm.dosage}}" bindinput="onAddInput" data-field="dosage" />
+    </view>
+    <view class="form-group">
+      <text>频率</text>
+      <input class="form-input" placeholder="如每日2次" value="{{addForm.frequency}}" bindinput="onAddInput" data-field="frequency" />
+    </view>
+    <view class="form-group">
+      <text>时间</text>
+      <input class="form-input" placeholder="如08:00" value="{{addForm.schedule[0].time}}" bindinput="onAddInput" data-field="schedule[0].time" />
+    </view>
+    <view class="form-group">
+      <text>开始日期</text>
+      <input class="form-input" type="date" value="{{addForm.startDate}}" bindinput="onAddInput" data-field="startDate" />
+    </view>
+    <view class="form-group">
+      <text>结束日期</text>
+      <input class="form-input" type="date" value="{{addForm.endDate}}" bindinput="onAddInput" data-field="endDate" />
+    </view>
+    <view class="form-group">
+      <text>备注</text>
+      <input class="form-input" placeholder="可选" value="{{addForm.notes}}" bindinput="onAddInput" data-field="notes" />
+    </view>
+    <view class="form-actions">
+      <button class="submit-btn" bindtap="submitAddMedication">提交</button>
+      <button class="cancel-btn" bindtap="hideAddMedication">取消</button>
+    </view>
+  </view>
+</view> 

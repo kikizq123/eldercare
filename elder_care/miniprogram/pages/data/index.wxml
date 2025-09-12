@@ -1,0 +1,86 @@
+<view class="container">
+  <view class="type-selector">
+    <view class="section-title">选择要记录的数据类型</view>
+    <view class="type-list">
+      <view 
+        class="type-item {{selectedType === item.type ? 'selected' : ''}}" 
+        wx:for="{{healthTypes}}" 
+        wx:key="type"
+        bindtap="selectType"
+        data-type="{{item.type}}"
+      >
+        <text class="type-name">{{item.name}}</text>
+        <text class="type-unit">{{item.unit}}</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="data-form" wx:if="{{selectedType}}">
+    <view class="section-title">输入数据</view>
+    
+    <!-- 血压输入（特殊处理） -->
+    <block wx:if="{{selectedType === 'bloodPressure'}}">
+      <view class="input-group">
+        <text class="input-label">收缩压</text>
+        <input 
+          class="input-value" 
+          type="digit" 
+          placeholder="请输入收缩压" 
+          value="{{formData.value}}"
+          bindinput="onValueChange"
+          data-field="value"
+        />
+        <text class="input-unit">mmHg</text>
+      </view>
+      <view class="input-group">
+        <text class="input-label">舒张压</text>
+        <input 
+          class="input-value" 
+          type="digit" 
+          placeholder="请输入舒张压" 
+          value="{{formData.subValue}}"
+          bindinput="onValueChange"
+          data-field="subValue"
+        />
+        <text class="input-unit">mmHg</text>
+      </view>
+    </block>
+
+    <!-- 其他类型输入 -->
+    <block wx:else>
+      <view class="input-group">
+        <text class="input-label">{{selectedTypeName}}</text>
+        <input 
+          class="input-value" 
+          type="digit" 
+          placeholder="请输入数值" 
+          value="{{formData.value}}"
+          bindinput="onValueChange"
+          data-field="value"
+        />
+        <text class="input-unit">{{selectedTypeUnit}}</text>
+        <view class="view-history" bindtap="viewDataDetail" data-type="{{selectedType}}">
+          <text>查看历史</text>
+        </view>
+      </view>
+    </block>
+
+    <!-- 备注 -->
+    <view class="notes-section">
+      <view class="notes-header" bindtap="toggleNotes">
+        <text class="notes-title">添加备注</text>
+        <text class="notes-icon">{{showNotes ? '▼' : '▶'}}</text>
+      </view>
+      <textarea 
+        wx:if="{{showNotes}}"
+        class="notes-input"
+        placeholder="请输入备注信息"
+        value="{{formData.notes}}"
+        bindinput="onValueChange"
+        data-field="notes"
+      ></textarea>
+    </view>
+
+    <button class="submit-btn" bindtap="submitData">提交</button>
+  </view>
+</view> 

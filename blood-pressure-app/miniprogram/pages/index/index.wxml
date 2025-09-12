@@ -1,0 +1,156 @@
+<!--index.wxml-->
+<view class="container">
+  <!-- 顶部欢迎卡片 -->
+  <view class="card welcome-card">
+    <view class="welcome-content">
+      <view class="welcome-text">
+        <text class="greeting">{{greeting}}</text>
+        <text class="username">{{userInfo.nickname || '用户'}}</text>
+      </view>
+      <view class="welcome-date">
+        <text>{{currentDate}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 快速记录卡片 -->
+  <view class="card quick-record-card">
+    <view class="card-header">
+      <text class="card-title">快速记录血压</text>
+      <view class="last-record" wx:if="{{lastRecord}}">
+        <text class="last-record-text">上次记录: {{lastRecord.time}}</text>
+      </view>
+    </view>
+    <view class="card-content">
+      <view class="quick-record-form">
+        <view class="bp-input-group">
+          <view class="bp-input-item">
+            <text class="bp-label">收缩压</text>
+            <input 
+              class="bp-input" 
+              type="number" 
+              placeholder="120"
+              value="{{systolic}}" 
+              bindinput="onSystolicInput"
+            />
+            <text class="bp-unit">mmHg</text>
+          </view>
+          
+          <view class="bp-separator">/</view>
+          
+          <view class="bp-input-item">
+            <text class="bp-label">舒张压</text>
+            <input 
+              class="bp-input" 
+              type="number" 
+              placeholder="80"
+              value="{{diastolic}}" 
+              bindinput="onDiastolicInput"
+            />
+            <text class="bp-unit">mmHg</text>
+          </view>
+        </view>
+        
+        <button 
+          class="btn btn-primary btn-large quick-save-btn" 
+          bindtap="quickSave"
+          disabled="{{!canSave}}"
+        >
+          {{saving ? '保存中...' : '立即保存'}}
+        </button>
+      </view>
+    </view>
+  </view>
+
+  <!-- 血压分级提示 -->
+  <view class="card level-tip-card" wx:if="{{bpLevel}}">
+    <view class="level-tip">
+      <view class="level-indicator" style="background-color: {{bpLevel.color}}"></view>
+      <view class="level-content">
+        <text class="level-name">{{bpLevel.name}}</text>
+        <text class="level-desc">{{bpLevel.description}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 今日统计 -->
+  <view class="card stats-card">
+    <view class="card-header">
+      <text class="card-title">今日概况</text>
+      <text class="more-link" bindtap="goToStats">查看更多 ></text>
+    </view>
+    <view class="card-content">
+      <view class="stats-grid">
+        <view class="stats-item">
+          <text class="stats-value">{{todayStats.records}}</text>
+          <text class="stats-label">今日记录</text>
+        </view>
+        <view class="stats-item">
+          <text class="stats-value">{{todayStats.avgSystolic || '--'}}</text>
+          <text class="stats-label">平均收缩压</text>
+        </view>
+        <view class="stats-item">
+          <text class="stats-value">{{todayStats.avgDiastolic || '--'}}</text>
+          <text class="stats-label">平均舒张压</text>
+        </view>
+        <view class="stats-item">
+          <text class="stats-value">{{totalRecords}}</text>
+          <text class="stats-label">总记录数</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 最近记录 -->
+  <view class="card recent-records-card" wx:if="{{recentRecords.length > 0}}">
+    <view class="card-header">
+      <text class="card-title">最近记录</text>
+      <text class="more-link" bindtap="goToList">查看全部 ></text>
+    </view>
+    <view class="card-content">
+      <view class="recent-records">
+        <view 
+          class="record-item" 
+          wx:for="{{recentRecords}}" 
+          wx:key="_id"
+          bindtap="goToDetail"
+          data-id="{{item._id}}"
+        >
+          <view class="record-time">{{item.timeStr}}</view>
+          <view class="record-bp">
+            <view class="bp-value">
+              <text class="bp-systolic">{{item.systolic}}</text>
+              <text class="bp-separator">/</text>
+              <text class="bp-diastolic">{{item.diastolic}}</text>
+              <text class="bp-unit">mmHg</text>
+            </view>
+          </view>
+          <view class="record-level">
+            <view class="bp-level bp-level-{{item.classification.level}}">
+              {{item.classification.name}}
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 空状态 -->
+  <view class="empty-state" wx:if="{{recentRecords.length === 0 && !loading}}">
+    <view class="empty-icon">📊</view>
+    <view class="empty-text">还没有血压记录</view>
+    <view class="empty-desc">点击下方按钮开始记录您的血压数据</view>
+    <button class="btn btn-primary" bindtap="goToRecord">开始记录</button>
+  </view>
+
+  <!-- 加载状态 -->
+  <view class="loading" wx:if="{{loading}}">
+    <view class="loading-spinner"></view>
+    <view class="loading-text">加载中...</view>
+  </view>
+</view>
+
+<!-- 浮动记录按钮 -->
+<view class="fab" bindtap="goToRecord">
+  <text class="fab-icon">+</text>
+</view>

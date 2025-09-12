@@ -1,0 +1,57 @@
+<view class="container">
+  <view class="role-info" wx:if="{{role}}">
+    当前身份：{{role === 'elder' ? '长辈' : '家人'}}
+  </view>
+  <view class="userinfo">
+    <block wx:if="{{canIUse}}">
+      <button wx:if="{{!hasUserInfo}}" open-type="getUserInfo" bindgetuserinfo="getUserInfo">获取用户信息</button>
+      <view wx:else class="userinfo-avatar">
+        <image bindtap="bindViewTap" class="userinfo-avatar" src="{{userInfo.avatarUrl}}" mode="cover"></image>
+        <text class="userinfo-nickname">{{userInfo.nickName}}</text>
+      </view>
+    </block>
+  </view>
+
+  <view class="health-data">
+    <view class="section-title">今日健康数据</view>
+    <view class="data-list" style="height: 49rpx; display: block; box-sizing: border-box">
+      <view class="data-item" wx:for="{{healthData}}" wx:key="id">
+        <text class="data-type">{{item.type}}</text>
+        <text class="data-value">{{item.value}}{{item.unit}}</text>
+        <text class="data-time">{{item.timestamp}}</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="navi-buttons">
+    <navigator url="/pages/data/index" class="navi-btn">
+      <view class="navi-icon">📊</view>
+      <view class="navi-text">健康数据</view>
+    </navigator>
+    <navigator url="/pages/reminder/index" class="navi-btn">
+      <view class="navi-icon">💊</view>
+      <view class="navi-text">用药提醒</view>
+    </navigator>
+    <navigator url="/pages/rehab/index" class="navi-btn">
+      <view class="navi-icon">🏋️</view>
+      <view class="navi-text">康复打卡</view>
+    </navigator>
+  </view>
+
+  <view class="medication">
+    <view class="section-title">今日用药提醒</view>
+    <view class="medication-list" style="height: 49rpx; display: block; box-sizing: border-box">
+      <view class="medication-item" wx:for="{{medications}}" wx:key="id">
+        <text class="medication-name">{{item.name}}</text>
+        <text class="medication-dosage">{{item.dosage}}</text>
+        <text class="medication-time">{{item.schedule[0].time}}</text>
+        <button class="medication-taken" bindtap="markTaken" data-id="{{item._id}}">已服用</button>
+      </view>
+    </view>
+  </view>
+
+  <button class="sos-button" bindtap="handleSOS">紧急求助</button>
+
+  <!-- 开发调试用重置按钮 -->
+  <button class="reset-button" bindtap="resetApp" style="margin-top: 30rpx; font-size: 24rpx; color: #999; background: #f0f0f0; width: 50%;">重置应用</button>
+</view> 

@@ -1,0 +1,65 @@
+<view class="container">
+  <button class="share-btn" open-type="share">分享</button>
+  <view class="type-header">
+    <text class="type-name">{{dataType.name}}</text>
+    <text class="type-unit">单位: {{dataType.unit}}</text>
+  </view>
+
+  <!-- 趋势图显示区域 -->
+  <view class="chart-container">
+    <view class="chart-header">
+      <text class="chart-title">{{period}}趋势</text>
+      <view class="chart-tabs">
+        <text class="tab {{period === '周' ? 'active' : ''}}" bindtap="switchPeriod" data-period="周">周</text>
+        <text class="tab {{period === '月' ? 'active' : ''}}" bindtap="switchPeriod" data-period="月">月</text>
+      </view>
+    </view>
+    
+    <!-- 简易图表展示，MVP阶段使用一个容器模拟图表 -->
+    <view class="chart-wrapper">
+      <view class="chart-y-axis">
+        <text wx:for="{{yAxis}}" wx:key="index">{{item}}</text>
+      </view>
+      <view class="chart-content">
+        <view class="chart-bars">
+          <view class="chart-bar-item" wx:for="{{chartData}}" wx:key="date">
+            <view class="chart-bar {{item.isAbnormal ? 'abnormal' : ''}}" style="height: {{item.height}}%">
+              <text class="chart-value">{{item.value}}</text>
+            </view>
+            <text class="chart-date">{{item.dateLabel}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+    
+    <view class="chart-legend">
+      <view class="legend-item">
+        <view class="legend-color normal"></view>
+        <text>正常</text>
+      </view>
+      <view class="legend-item">
+        <view class="legend-color abnormal"></view>
+        <text>异常</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 数据记录列表 -->
+  <view class="data-list">
+    <view class="list-header">
+      <text>历史记录</text>
+    </view>
+    <view class="list-content">
+      <view class="list-item {{item.isAbnormal ? 'abnormal' : ''}}" wx:for="{{historyData}}" wx:key="date">
+        <view class="list-item-left">
+          <text class="list-date">{{item.date}}</text>
+          <text class="list-time">{{item.time}}</text>
+        </view>
+        <view class="list-item-right">
+          <text class="list-value">{{item.value}}{{dataType.unit}}</text>
+          <text class="abnormal-tag" wx:if="{{item.isAbnormal}}">异常</text>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>
