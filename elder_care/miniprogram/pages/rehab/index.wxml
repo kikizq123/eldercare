@@ -7,6 +7,7 @@
       <view class="rehab-info">
         <text class="rehab-name">{{item.name}}</text>
         <text class="rehab-frequency">{{item.frequency}}</text>
+        <text class="rehab-notes" wx:if="{{item.notes}}">{{item.notes}}</text>
       </view>
       <view class="rehab-actions">
         <button class="checkin-btn {{item.checkedToday ? 'checked' : ''}}" 
@@ -14,6 +15,7 @@
                 data-id="{{item._id}}">
           {{item.checkedToday ? '已打卡' : '打卡'}}
         </button>
+        <button class="delete-btn" bindtap="deleteRehab" data-id="{{item._id}}">删除</button>
       </view>
     </view>
   </view>

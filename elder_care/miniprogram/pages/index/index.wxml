@@ -1,57 +1,102 @@
 <view class="container">
-  <view class="role-info" wx:if="{{role}}">
-    当前身份：{{role === 'elder' ? '长辈' : '家人'}}
-  </view>
-  <view class="userinfo">
-    <block wx:if="{{canIUse}}">
-      <button wx:if="{{!hasUserInfo}}" open-type="getUserInfo" bindgetuserinfo="getUserInfo">获取用户信息</button>
-      <view wx:else class="userinfo-avatar">
-        <image bindtap="bindViewTap" class="userinfo-avatar" src="{{userInfo.avatarUrl}}" mode="cover"></image>
-        <text class="userinfo-nickname">{{userInfo.nickName}}</text>
+  <!-- 用户信息卡片 -->
+  <view class="user-card card">
+    <view class="user-info">
+      <view class="user-avatar">
+        <text class="avatar-text">{{userInfo.name ? userInfo.name.charAt(0) : '用'}}</text>
       </view>
-    </block>
+      <view class="user-details">
+        <text class="user-name">{{userInfo.name || '用户'}}</text>
+        <text class="user-role">{{userInfo.role === 'elder' ? '长辈用户' : '家庭成员'}}</text>
+      </view>
+    </view>
+    <navigator url="/pages/profile/index" class="profile-btn">
+      <text>个人资料</text>
+    </navigator>
   </view>
 
-  <view class="health-data">
-    <view class="section-title">今日健康数据</view>
-    <view class="data-list" style="height: 49rpx; display: block; box-sizing: border-box">
-      <view class="data-item" wx:for="{{healthData}}" wx:key="id">
-        <text class="data-type">{{item.type}}</text>
-        <text class="data-value">{{item.value}}{{item.unit}}</text>
-        <text class="data-time">{{item.timestamp}}</text>
+  <!-- 快速操作按钮 -->
+  <view class="quick-actions">
+    <navigator url="/pages/data/index" class="action-btn">
+      <view class="action-icon">📊</view>
+      <text class="action-text">记录数据</text>
+    </navigator>
+    <navigator url="/pages/reminder/index" class="action-btn">
+      <view class="action-icon">💊</view>
+      <text class="action-text">用药提醒</text>
+    </navigator>
+    <navigator url="/pages/rehab/index" class="action-btn">
+      <view class="action-icon">🏋️</view>
+      <text class="action-text">康复锻炼</text>
+    </navigator>
+    <navigator url="/pages/bind/index" class="action-btn">
+      <view class="action-icon">👨‍👩‍👧‍👦</view>
+      <text class="action-text">家庭绑定</text>
+    </navigator>
+  </view>
+
+  <!-- 今日健康数据摘要 -->
+  <view class="health-summary card">
+    <view class="card-header">
+      <text class="card-title">今日健康数据</text>
+      <navigator url="/pages/data-detail/index" class="more-btn">查看更多</navigator>
+    </view>
+    <view class="health-items" wx:if="{{healthData.length > 0}}">
+      <view class="health-item" wx:for="{{healthData}}" wx:key="type">
+        <view class="health-icon">
+          <text wx:if="{{item.type === 'bloodPressure'}}">🩸</text>
+          <text wx:elif="{{item.type === 'bloodSugar'}}">🍯</text>
+          <text wx:elif="{{item.type === 'weight'}}">⚖️</text>
+          <text wx:elif="{{item.type === 'temperature'}}">🌡️</text>
+          <text wx:else>📊</text>
+        </view>
+        <view class="health-info">
+          <text class="health-type">
+            {{item.type === 'bloodPressure' ? '血压' : 
+              item.type === 'bloodSugar' ? '血糖' : 
+              item.type === 'weight' ? '体重' : 
+              item.type === 'temperature' ? '体温' : '数据'}}
+          </text>
+          <text class="health-value">{{item.value}} {{item.unit}}</text>
+        </view>
+        <view class="health-status {{item.isNormal ? 'normal' : 'abnormal'}}">
+          <text>{{item.isNormal ? '正常' : '异常'}}</text>
+        </view>
       </view>
+    </view>
+    <view class="empty-tip" wx:else>
+      <text>暂无健康数据，点击"记录数据"开始记录</text>
     </view>
   </view>
 
-  <view class="navi-buttons">
-    <navigator url="/pages/data/index" class="navi-btn">
-      <view class="navi-icon">📊</view>
-      <view class="navi-text">健康数据</view>
-    </navigator>
-    <navigator url="/pages/reminder/index" class="navi-btn">
-      <view class="navi-icon">💊</view>
-      <view class="navi-text">用药提醒</view>
-    </navigator>
-    <navigator url="/pages/rehab/index" class="navi-btn">
-      <view class="navi-icon">🏋️</view>
-      <view class="navi-text">康复打卡</view>
-    </navigator>
-  </view>
-
-  <view class="medication">
-    <view class="section-title">今日用药提醒</view>
-    <view class="medication-list" style="height: 49rpx; display: block; box-sizing: border-box">
-      <view class="medication-item" wx:for="{{medications}}" wx:key="id">
-        <text class="medication-name">{{item.name}}</text>
-        <text class="medication-dosage">{{item.dosage}}</text>
-        <text class="medication-time">{{item.schedule[0].time}}</text>
-        <button class="medication-taken" bindtap="markTaken" data-id="{{item._id}}">已服用</button>
+  <!-- 今日用药提醒 -->
+  <view class="medication-summary card">
+    <view class="card-header">
+      <text class="card-title">今日用药提醒</text>
+      <navigator url="/pages/reminder/index" class="more-btn">管理用药</navigator>
+    </view>
+    <view class="medication-items" wx:if="{{medications.length > 0}}">
+      <view class="medication-item" wx:for="{{medications}}" wx:key="_id">
+        <view class="med-info">
+          <text class="med-name">{{item.name}}</text>
+          <text class="med-dosage">{{item.dosage}} · {{item.displayTimes}}</text>
+        </view>
+        <view class="med-status {{item.takenToday ? 'taken' : 'pending'}}">
+          <text>{{item.takenToday ? '已服用' : '待服用'}}</text>
+        </view>
       </view>
+    </view>
+    <view class="empty-tip" wx:else>
+      <text>暂无用药计划，点击"用药提醒"添加</text>
     </view>
   </view>
 
-  <button class="sos-button" bindtap="handleSOS">紧急求助</button>
+  <!-- 紧急求助按钮 -->
+  <button class="sos-button" bindtap="handleSOS">
+    <text class="sos-icon">🚨</text>
+    <text class="sos-text">紧急求助</text>
+  </button>
 
   <!-- 开发调试用重置按钮 -->
-  <button class="reset-button" bindtap="resetApp" style="margin-top: 30rpx; font-size: 24rpx; color: #999; background: #f0f0f0; width: 50%;">重置应用</button>
+  <button class="reset-button" bindtap="resetApp">重置应用</button>
 </view> 

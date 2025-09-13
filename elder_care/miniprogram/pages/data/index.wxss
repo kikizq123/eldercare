@@ -82,6 +82,43 @@
   font-size: 28rpx;
 }
 
+.datetime-section {
+  margin: 30rpx 0;
+  padding: 20rpx 0;
+  border-top: 1rpx solid #eee;
+  border-bottom: 1rpx solid #eee;
+}
+
+.datetime-group {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20rpx;
+  padding: 10rpx 0;
+}
+
+.datetime-label {
+  width: 160rpx;
+  font-size: 32rpx;
+  color: #333;
+}
+
+.datetime-picker {
+  flex: 1;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15rpx 20rpx;
+  background: #f5f5f5;
+  border-radius: 8rpx;
+  font-size: 32rpx;
+  color: #333;
+}
+
+.picker-arrow {
+  color: #999;
+  font-size: 24rpx;
+}
+
 .notes-section {
   margin-top: 40rpx;
 }

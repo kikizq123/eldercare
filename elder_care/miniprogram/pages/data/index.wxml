@@ -65,6 +65,28 @@
       </view>
     </block>
 
+    <!-- 日期时间选择 -->
+    <view class="datetime-section">
+      <view class="datetime-group">
+        <text class="datetime-label">记录日期</text>
+        <picker mode="date" value="{{formData.date}}" bindchange="onDateChange">
+          <view class="datetime-picker">
+            <text>{{formData.date}}</text>
+            <text class="picker-arrow">▼</text>
+          </view>
+        </picker>
+      </view>
+      <view class="datetime-group">
+        <text class="datetime-label">记录时间</text>
+        <picker mode="time" value="{{formData.time}}" bindchange="onTimeChange">
+          <view class="datetime-picker">
+            <text>{{formData.time}}</text>
+            <text class="picker-arrow">▼</text>
+          </view>
+        </picker>
+      </view>
+    </view>
+
     <!-- 备注 -->
     <view class="notes-section">
       <view class="notes-header" bindtap="toggleNotes">

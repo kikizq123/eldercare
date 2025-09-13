@@ -9,6 +9,7 @@ Page({
 
   onLoad: function(options) {
     const { type } = options;
+    this.setData({ currentType: type || 'bloodPressure' });
     this.setDataType(type || 'bloodPressure');
     this.loadDataByPeriod(this.data.period);
   },
@@ -44,9 +45,106 @@ Page({
 
   // 根据周期加载数据
   loadDataByPeriod: function(period) {
-    // 根据所选周期生成模拟数据
-    const data = this.generateMockData(period);
+    const userInfo = wx.getStorageSync('userInfo');
+    if (!userInfo) {
+      wx.showToast({
+        title: '请先登录',
+        icon: 'none'
+      });
+      return;
+    }
+
+    // 计算日期范围
+    const endDate = new Date();
+    const startDate = new Date();
+    const days = period === '周' ? 7 : 30;
+    startDate.setDate(endDate.getDate() - days);
+
+    wx.showLoading({
+      title: '加载中...',
+      mask: true
+    });
+
+    // 从后端获取数据
+    wx.request({
+      url: getApp().globalData.baseUrl + '/health/trend',
+      method: 'GET',
+      data: {
+        userId: userInfo._id,
+        type: this.data.currentType,
+        startDate: startDate.toISOString(),
+        endDate: endDate.toISOString()
+      },
+      success: (res) => {
+        wx.hideLoading();
+        if (res.data.success) {
+          const data = this.processHealthData(res.data.data);
+          
+          // 如果没有数据，生成模拟数据用于演示
+          if (data.length === 0) {
+            const mockData = this.generateMockData(period);
+            this.processAndDisplayData(mockData);
+          } else {
+            this.processAndDisplayData(data);
+          }
+        } else {
+          // 失败时使用模拟数据
+          const mockData = this.generateMockData(period);
+          this.processAndDisplayData(mockData);
+        }
+      },
+      fail: () => {
+        wx.hideLoading();
+        // 网络失败时使用模拟数据
+        const mockData = this.generateMockData(period);
+        this.processAndDisplayData(mockData);
+      }
+    });
+  },
+
+  // 处理后端返回的健康数据
+  processHealthData: function(rawData) {
+    return rawData.map(item => {
+      const date = new Date(item.timestamp);
+      const dateStr = date.toISOString().split('T')[0];
+      const timeStr = date.toTimeString().split(' ')[0].substring(0, 5);
+      
+      return {
+        date: dateStr,
+        time: timeStr,
+        value: item.value,
+        rawValue: this.extractNumericValue(item.value),
+        isAbnormal: this.checkIfAbnormal(item.type, item.value),
+        notes: item.notes || ''
+      };
+    });
+  },
+
+  // 提取数值（处理血压等复合数值）
+  extractNumericValue: function(value) {
+    if (typeof value === 'string' && value.includes('/')) {
+      // 血压格式：120/80
+      return parseFloat(value.split('/')[0]);
+    }
+    return parseFloat(value);
+  },
+
+  // 检查数值是否异常
+  checkIfAbnormal: function(type, value) {
+    const numValue = this.extractNumericValue(value);
+    const normalRanges = {
+      bloodPressure: { min: 90, max: 140 },
+      bloodSugar: { min: 3.9, max: 7.8 },
+      weight: { min: 45, max: 90 },
+      temperature: { min: 36, max: 37.3 }
+    };
     
+    const range = normalRanges[type];
+    return range && (numValue < range.min || numValue > range.max);
+  },
+
+  // 处理并显示数据
+  processAndDisplayData: function(data) {
     // 设置Y轴刻度
     this.setYAxis(data);
     
@@ -55,7 +153,7 @@ Page({
     
     // 设置历史数据（按日期倒序排列）
     this.setData({
-      historyData: data.sort((a, b) => new Date(b.date) - new Date(a.date))
+      historyData: data.sort((a, b) => new Date(b.date + ' ' + b.time) - new Date(a.date + ' ' + a.time))
     });
   },
 

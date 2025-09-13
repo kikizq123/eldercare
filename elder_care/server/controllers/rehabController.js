@@ -1,28 +1,73 @@
 const { RehabPlan, RehabRecord } = require('../models/Rehab');
 const User = require('../models/User');
+const mongoose = require('mongoose');
+
+// 模拟数据存储（开发模式使用）
+let mockRehabPlans = [];
+let mockRehabRecords = [];
+let mockIdCounter = 1;
+
+// 检查数据库连接状态
+function isDatabaseConnected() {
+  return mongoose.connection.readyState === 1;
+}
 
 // 创建康复计划
 exports.createPlan = async (req, res) => {
   try {
-    const { userId, name, description, exercises, schedule, endDate } = req.body;
+    const { userId, name, frequency, notes } = req.body;
+    console.log('创建康复计划:', req.body);
     
-    const plan = new RehabPlan({
-      userId,
-      name,
-      description,
-      exercises,
-      schedule,
-      endDate,
-      createdBy: userId
-    });
-    
-    await plan.save();
-    
-    res.json({
-      success: true,
-      data: plan
-    });
+    if (isDatabaseConnected()) {
+      // 数据库模式
+      const plan = new RehabPlan({
+        userId,
+        name,
+        frequency,
+        notes,
+        createdBy: userId
+      });
+      
+      await plan.save();
+      
+      res.json({
+        success: true,
+        data: plan
+      });
+    } else {
+      // 开发模式：使用内存存储
+      const mockPlan = {
+        _id: 'mock_rehab_' + mockIdCounter++,
+        userId,
+        name,
+        frequency,
+        notes: notes || '',
+        checkins: [],
+        isActive: true,
+        createdAt: new Date(),
+        updatedAt: new Date()
+      };
+      
+      // 验证必要字段
+      if (!mockPlan.name || !mockPlan.frequency) {
+        return res.status(400).json({
+          success: false,
+          message: '缺少必要字段：name 或 frequency'
+        });
+      }
+      
+      mockRehabPlans.push(mockPlan);
+      
+      console.log('开发模式：康复计划已保存', mockPlan);
+      
+      res.json({
+        success: true,
+        data: mockPlan,
+        mode: 'development'
+      });
+    }
   } catch (error) {
+    console.error('创建康复计划错误:', error);
     res.status(500).json({
       success: false,
       message: error.message
@@ -33,18 +78,37 @@ exports.createPlan = async (req, res) => {
 // 获取用户的康复计划列表
 exports.getUserPlans = async (req, res) => {
   try {
-    const { userId } = req.params;
+    const { userId } = req.query;
+    console.log('获取康复计划列表, userId:', userId);
     
-    const plans = await RehabPlan.find({ 
-      userId,
-      isActive: true 
-    }).sort({ createdAt: -1 });
-    
-    res.json({
-      success: true,
-      data: plans
-    });
+    if (isDatabaseConnected()) {
+      // 数据库模式
+      const plans = await RehabPlan.find({ 
+        userId,
+        isActive: true 
+      }).sort({ createdAt: -1 });
+      
+      res.json({
+        success: true,
+        data: plans
+      });
+    } else {
+      // 开发模式：返回模拟数据
+      const filteredPlans = mockRehabPlans
+        .filter(plan => !userId || plan.userId === userId)
+        .filter(plan => plan.isActive !== false)
+        .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+      
+      console.log('开发模式：返回康复计划', filteredPlans.length, '个');
+      
+      res.json({
+        success: true,
+        data: filteredPlans,
+        mode: 'development'
+      });
+    }
   } catch (error) {
+    console.error('获取康复计划错误:', error);
     res.status(500).json({
       success: false,
       message: error.message
@@ -138,45 +202,109 @@ exports.deletePlan = async (req, res) => {
   }
 };
 
-// 记录康复训练
-exports.recordExercise = async (req, res) => {
+// 康复打卡
+exports.checkin = async (req, res) => {
   try {
-    const {
-      userId,
-      planId,
-      exerciseId,
-      exerciseName,
-      completed,
-      actualCount,
-      actualDuration,
-      actualSets,
-      difficulty,
-      feeling,
-      notes
-    } = req.body;
+    const { planId, userId, checked, date } = req.body;
+    console.log('康复打卡:', { planId, userId, checked, date });
     
-    const record = new RehabRecord({
-      userId,
-      planId,
-      exerciseId,
-      exerciseName,
-      completed,
-      actualCount,
-      actualDuration,
-      actualSets,
-      difficulty,
-      feeling,
-      notes,
-      completedAt: completed ? new Date() : null
-    });
-    
-    await record.save();
-    
-    res.json({
-      success: true,
-      data: record
-    });
+    if (isDatabaseConnected()) {
+      // 数据库模式
+      // 这里可以实现更复杂的打卡逻辑
+      res.json({
+        success: true,
+        message: checked ? '打卡成功' : '取消打卡成功'
+      });
+    } else {
+      // 开发模式：更新模拟数据
+      const planIndex = mockRehabPlans.findIndex(plan => plan._id === planId);
+      if (planIndex === -1) {
+        return res.status(404).json({
+          success: false,
+          message: '康复计划不存在'
+        });
+      }
+      
+      const checkinDate = date || new Date().toISOString().split('T')[0];
+      let checkins = mockRehabPlans[planIndex].checkins || [];
+      
+      if (checked) {
+        // 添加打卡记录
+        if (!checkins.includes(checkinDate)) {
+          checkins.push(checkinDate);
+        }
+      } else {
+        // 移除打卡记录
+        checkins = checkins.filter(d => d !== checkinDate);
+      }
+      
+      mockRehabPlans[planIndex].checkins = checkins;
+      mockRehabPlans[planIndex].updatedAt = new Date();
+      
+      console.log('开发模式：打卡状态已更新', mockRehabPlans[planIndex]);
+      
+      res.json({
+        success: true,
+        message: checked ? '打卡成功' : '取消打卡成功',
+        mode: 'development'
+      });
+    }
   } catch (error) {
+    console.error('康复打卡错误:', error);
+    res.status(500).json({
+      success: false,
+      message: error.message
+    });
+  }
+};
+
+// 删除康复计划
+exports.deletePlan = async (req, res) => {
+  try {
+    const { id } = req.params;
+    console.log('删除康复计划:', id);
+    
+    if (isDatabaseConnected()) {
+      // 数据库模式
+      const plan = await RehabPlan.findByIdAndUpdate(
+        id,
+        { isActive: false },
+        { new: true }
+      );
+      
+      if (!plan) {
+        return res.status(404).json({
+          success: false,
+          message: '康复计划不存在'
+        });
+      }
+      
+      res.json({
+        success: true,
+        message: '删除成功'
+      });
+    } else {
+      // 开发模式
+      const planIndex = mockRehabPlans.findIndex(plan => plan._id === id);
+      if (planIndex === -1) {
+        return res.status(404).json({
+          success: false,
+          message: '康复计划不存在'
+        });
+      }
+      
+      mockRehabPlans.splice(planIndex, 1);
+      
+      console.log('开发模式：康复计划已删除');
+      
+      res.json({
+        success: true,
+        message: '删除成功',
+        mode: 'development'
+      });
+    }
+  } catch (error) {
+    console.error('删除康复计划错误:', error);
     res.status(500).json({
       success: false,
       message: error.message

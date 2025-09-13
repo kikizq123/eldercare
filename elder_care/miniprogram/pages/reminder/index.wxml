@@ -7,8 +7,8 @@
     <view class="medication-item" wx:for="{{medications}}" wx:key="_id">
       <view class="medication-info">
         <text class="medication-name">{{item.name}}</text>
-        <text class="medication-dosage">{{item.dosage}}</text>
-        <text class="medication-time">{{item.time}}</text>
+        <text class="medication-dosage">剂量：{{item.dosage}}</text>
+        <text class="medication-time">时间：{{item.displayTimes}}</text>
       </view>
       <view class="medication-actions">
         <button class="taken-btn {{item.takenToday ? 'checked' : ''}}" bindtap="markTaken" data-id="{{item._id}}">

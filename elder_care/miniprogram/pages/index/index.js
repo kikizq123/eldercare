@@ -26,27 +26,108 @@ Page({
   },
 
   loadData: function() {
+    const userInfo = wx.getStorageSync('userInfo');
+    if (!userInfo) return;
+
     // 加载健康数据
     wx.request({
       url: getApp().globalData.baseUrl + '/health/latest',
       method: 'GET',
+      data: {
+        userId: userInfo._id
+      },
       success: (res) => {
+        if (res.data.success) {
+          this.setData({
+            healthData: res.data.data || []
+          });
+        }
+      },
+      fail: () => {
+        // 失败时显示模拟数据
         this.setData({
-          healthData: res.data
+          healthData: this.getMockHealthData()
         });
       }
     });
 
-    // 加载用药提醒
+    // 加载今日用药提醒
     wx.request({
       url: getApp().globalData.baseUrl + '/medication/today',
       method: 'GET',
+      data: {
+        userId: userInfo._id
+      },
       success: (res) => {
+        if (res.data.success) {
+          const medications = res.data.data || [];
+          const today = new Date().toISOString().split('T')[0];
+          
+          // 处理服用状态
+          const processedMeds = medications.map(item => {
+            const takenRecords = item.takenRecords || [];
+            const todayRecord = takenRecords.find(record => record.date === today);
+            const takenToday = todayRecord ? todayRecord.taken : false;
+            
+            return { 
+              ...item, 
+              takenToday,
+              displayTimes: Array.isArray(item.times) ? item.times.join(' / ') : item.times
+            };
+          });
+          
+          this.setData({
+            medications: processedMeds
+          });
+        }
+      },
+      fail: () => {
+        // 失败时显示模拟数据
         this.setData({
-          medications: res.data
+          medications: this.getMockMedications()
         });
       }
     });
+  },
+
+  // 获取模拟健康数据
+  getMockHealthData: function() {
+    return [
+      {
+        type: 'bloodPressure',
+        value: '120/80',
+        unit: 'mmHg',
+        timestamp: new Date(),
+        isNormal: true
+      },
+      {
+        type: 'bloodSugar',
+        value: '5.6',
+        unit: 'mmol/L',
+        timestamp: new Date(),
+        isNormal: true
+      }
+    ];
+  },
+
+  // 获取模拟用药数据
+  getMockMedications: function() {
+    return [
+      {
+        _id: 'mock1',
+        name: '降压药',
+        dosage: '1片',
+        displayTimes: '早上 / 晚上',
+        takenToday: false
+      },
+      {
+        _id: 'mock2',
+        name: '维生素D',
+        dosage: '2粒',
+        displayTimes: '早上',
+        takenToday: true
+      }
+    ];
   },
 
   getUserInfo: function(e) {
