@@ -1,7 +1,29 @@
 App({
   onLaunch: function () {
     console.log('小程序启动');
-    this.doLogin();
+    this.checkLoginStatus();
+  },
+  
+  // 检查登录状态
+  checkLoginStatus: function() {
+    const userInfo = wx.getStorageSync('userInfo');
+    const role = wx.getStorageSync('role');
+    
+    if (userInfo && userInfo._id) {
+      // 已经登录，检查是否选择了角色
+      this.globalData.userInfo = userInfo;
+      console.log('用户已登录:', userInfo);
+      
+      if (!role) {
+        // 已登录但未选择角色，跳转到角色选择页
+        console.log('需要选择角色');
+        // 不需要在这里跳转，让页面自己处理
+      }
+    } else {
+      // 未登录，执行登录
+      console.log('用户未登录，开始登录流程');
+      this.doLogin();
+    }
   },
   
   doLogin: function() {
@@ -53,6 +75,15 @@ App({
           }
           
           this.globalData.userInfo = res.data.data;
+          
+          // 检查是否已选择角色
+          const role = wx.getStorageSync('role');
+          if (!role) {
+            // 登录成功但未选择角色，跳转到角色选择页
+            wx.reLaunch({
+              url: '/pages/role/index'
+            });
+          }
           
           // 触发登录成功事件
           if (this.loginSuccessCallback) {

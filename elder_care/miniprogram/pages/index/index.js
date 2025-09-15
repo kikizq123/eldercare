@@ -13,16 +13,41 @@ Page({
     // 开发调试用：清除所有存储，取消注释即可使用
     // this.clearAllStorage();
     
+    this.checkUserStatus();
+  },
+
+  // 检查用户状态
+  checkUserStatus: function() {
+    const userInfo = wx.getStorageSync('userInfo');
     const role = wx.getStorageSync('role');
-    console.log('Current role:', role);
     
-    if (wx.getStorageSync('userInfo')) {
-      this.setData({
-        userInfo: wx.getStorageSync('userInfo'),
-        hasUserInfo: true
+    console.log('检查用户状态:', { userInfo: !!userInfo, role });
+
+    if (!userInfo || !userInfo._id) {
+      // 未登录，跳转到角色选择页（会触发登录）
+      console.log('用户未登录，跳转到角色选择页');
+      wx.reLaunch({
+        url: '/pages/role/index'
       });
-      this.loadData();
+      return;
     }
+
+    if (!role) {
+      // 已登录但未选择角色
+      console.log('用户已登录但未选择角色，跳转到角色选择页');
+      wx.reLaunch({
+        url: '/pages/role/index'
+      });
+      return;
+    }
+
+    // 用户已登录且已选择角色，正常加载页面
+    console.log('用户状态正常，加载页面数据');
+    this.setData({
+      userInfo: userInfo,
+      hasUserInfo: true
+    });
+    this.loadData();
   },
 
   loadData: function() {

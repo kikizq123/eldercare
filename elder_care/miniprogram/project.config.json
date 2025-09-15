@@ -2,6 +2,8 @@
   "appid": "wx959450e1e574d970",
   "compileType": "miniprogram",
   "libVersion": "3.9.2",
+  "projectname": "长辈关怀宝",
+  "description": "长辈关怀微信小程序",
   "packOptions": {
     "ignore": [],
     "include": []
@@ -18,9 +20,40 @@
       "ignore": [],
       "disablePlugins": [],
       "outputPath": ""
+    },
+    "compileWorklet": false,
+    "uglifyFileName": false,
+    "uploadWithSourceMap": true,
+    "packNpmManually": false,
+    "minifyWXSS": true,
+    "minifyWXML": true,
+    "localPlugins": false,
+    "disableUseStrict": false,
+    "useCompilerPlugins": false,
+    "condition": false,
+    "swc": false,
+    "disableSWC": true
+  },
+  "condition": {
+    "search": {
+      "list": []
+    },
+    "conversation": {
+      "list": []
+    },
+    "game": {
+      "list": []
+    },
+    "plugin": {
+      "list": []
+    },
+    "gamePlugin": {
+      "list": []
+    },
+    "miniprogram": {
+      "list": []
     }
   },
-  "condition": {},
   "editorSetting": {
     "tabIndent": "insertSpaces",
     "tabSize": 2

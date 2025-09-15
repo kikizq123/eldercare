@@ -1,5 +1,21 @@
 <view class="role-container">
   <view class="role-title">请选择您的身份</view>
-  <button class="role-btn elder" data-role="elder" bindtap="chooseRole">我是长辈</button>
-  <button class="role-btn family" data-role="family" bindtap="chooseRole">我是家人</button>
+  
+  <view wx:if="{{userInfo}}" class="role-buttons">
+    <button class="role-btn elder" data-role="elder" bindtap="chooseRole">
+      <view class="role-icon">👴</view>
+      <view class="role-text">我是长辈</view>
+      <view class="role-desc">记录健康数据，接受家人关怀</view>
+    </button>
+    
+    <button class="role-btn family" data-role="family" bindtap="chooseRole">
+      <view class="role-icon">👨‍👩‍👧‍👦</view>
+      <view class="role-text">我是家人</view>
+      <view class="role-desc">关注长辈健康，提供贴心照护</view>
+    </button>
+  </view>
+  
+  <view wx:else class="loading-container">
+    <view class="loading-text">正在登录中...</view>
+  </view>
 </view>

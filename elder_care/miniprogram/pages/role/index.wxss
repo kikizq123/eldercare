@@ -3,27 +3,80 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 100vh;
-  background: #f7f7f7;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 40rpx;
 }
+
 .role-title {
+  font-size: 48rpx;
+  font-weight: bold;
+  margin-bottom: 80rpx;
+  color: #fff;
+  text-align: center;
+}
+
+.role-buttons {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 40rpx;
+}
+
+.role-btn {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 20rpx;
+  padding: 40rpx 30rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-shadow: 0 8rpx 32rpx rgba(0, 0, 0, 0.1);
+  border: none;
+}
+
+.role-btn:active {
+  transform: translateY(2rpx);
+  box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.1);
+}
+
+.role-icon {
+  font-size: 80rpx;
+  margin-bottom: 20rpx;
+}
+
+.role-text {
   font-size: 36rpx;
   font-weight: bold;
-  margin-bottom: 60rpx;
   color: #333;
+  margin-bottom: 10rpx;
 }
-.role-btn {
-  width: 80%;
-  height: 88rpx;
+
+.role-desc {
+  font-size: 28rpx;
+  color: #666;
+  text-align: center;
+  line-height: 1.4;
+}
+
+.elder .role-text {
+  color: #07c160;
+}
+
+.family .role-text {
+  color: #1890ff;
+}
+
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 200rpx;
+}
+
+.loading-text {
   font-size: 32rpx;
-  border-radius: 44rpx;
-  margin-bottom: 40rpx;
-}
-.elder {
-  background: #07c160;
-  color: #fff;
-}
-.family {
-  background: #1890ff;
-  color: #fff;
+  color: rgba(255, 255, 255, 0.8);
+  margin-top: 20rpx;
 }

@@ -21,7 +21,7 @@ Page({
     currentTime: ''
   },
 
-  onLoad: function() {
+  onLoad: function () {
     // 获取用户信息
     const userInfo = wx.getStorageSync('userInfo');
     if (!userInfo) {
@@ -29,23 +29,23 @@ Page({
         url: '/pages/profile/index'
       });
     }
-    
+
     // 设置当前日期和时间
     this.setCurrentDateTime();
   },
 
   // 设置当前日期和时间
-  setCurrentDateTime: function() {
+  setCurrentDateTime: function () {
     const now = new Date();
     const year = now.getFullYear();
     const month = (now.getMonth() + 1).toString().padStart(2, '0');
     const day = now.getDate().toString().padStart(2, '0');
     const hour = now.getHours().toString().padStart(2, '0');
     const minute = now.getMinutes().toString().padStart(2, '0');
-    
+
     const currentDate = `${year}-${month}-${day}`;
     const currentTime = `${hour}:${minute}`;
-    
+
     this.setData({
       currentDate,
       currentTime,
@@ -55,7 +55,7 @@ Page({
   },
 
   // 选择健康数据类型
-  selectType: function(e) {
+  selectType: function (e) {
     const type = e.currentTarget.dataset.type;
     const typeObj = this.data.healthTypes.find(t => t.type === type) || {};
     this.setData({
@@ -73,7 +73,7 @@ Page({
   },
 
   // 输入值变化
-  onValueChange: function(e) {
+  onValueChange: function (e) {
     const { field } = e.currentTarget.dataset;
     this.setData({
       [`formData.${field}`]: e.detail.value
@@ -81,23 +81,23 @@ Page({
   },
 
   // 日期选择
-  onDateChange: function(e) {
+  onDateChange: function (e) {
     this.setData({
       'formData.date': e.detail.value
     });
   },
 
   // 时间选择
-  onTimeChange: function(e) {
+  onTimeChange: function (e) {
     this.setData({
       'formData.time': e.detail.value
     });
   },
 
   // 数据验证
-  validateData: function() {
+  validateData: function () {
     const { selectedType, formData } = this.data;
-    
+
     if (!selectedType) {
       wx.showToast({
         title: '请选择数据类型',
@@ -123,10 +123,10 @@ Page({
         });
         return false;
       }
-      
+
       const systolic = parseFloat(formData.value);
       const diastolic = parseFloat(formData.subValue);
-      
+
       if (systolic <= diastolic) {
         wx.showToast({
           title: '收缩压应大于舒张压',
@@ -158,14 +158,14 @@ Page({
   },
 
   // 切换备注显示
-  toggleNotes: function() {
+  toggleNotes: function () {
     this.setData({
       showNotes: !this.data.showNotes
     });
   },
 
   // 提交数据
-  submitData: function() {
+  submitData: function () {
     // 数据验证
     if (!this.validateData()) {
       return;
@@ -228,7 +228,7 @@ Page({
   },
 
   // 重置表单
-  resetForm: function() {
+  resetForm: function () {
     this.setCurrentDateTime();
     this.setData({
       selectedType: null,
@@ -246,7 +246,7 @@ Page({
   },
 
   // 健康数据类型点击，跳转到详情页
-  viewDataDetail: function(e) {
+  viewDataDetail: function (e) {
     const { type } = e.currentTarget.dataset;
     wx.navigateTo({
       url: `/pages/data-detail/index?type=${type}`
